@@ -33,7 +33,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.ButtonScan -> {
-                Toast.makeText(context, "You clicked me.", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "You clicked me.", Toast.LENGTH_SHORT).show()
 
                 val permissionlistener: PermissionListener = object : PermissionListener {
                     override fun onPermissionGranted() {
