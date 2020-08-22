@@ -6,14 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
+import com.example.onbox.api.LockerResponse
+import com.example.onbox.api.RetrofitClient
+import kotlinx.android.synthetic.main.fragment_chose_box.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ScanQRFragment : Fragment() {
 
     private lateinit var codeScanner: CodeScanner
+    var scanData : String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +40,19 @@ class ScanQRFragment : Fragment() {
         codeScanner = CodeScanner(activity, scannerView)
         codeScanner.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
-                Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+                scanData = it.text
+                if(it.text.subSequence(0,3).toString() == "LOK")
+                {
+                    Toast.makeText(activity, scanData, Toast.LENGTH_LONG).show()
+                    val action = ScanQRFragmentDirections.actionScanQRFragmentToChoseBoxFragment(scanData)
+                    Navigation.findNavController(view).navigate(action)
+//                    findNavController().navigate(R.id.action_scanQRFragment_to_choseBoxFragment)
+                }
+                else
+                {
+                    Toast.makeText(activity, "Kode QR SALAH", Toast.LENGTH_LONG).show()
+                    findNavController().navigate((R.id.action_scanQRFragment_to_homeFragment))
+                }
             }
         }
         scannerView.setOnClickListener {
